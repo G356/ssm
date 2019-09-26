@@ -1,0 +1,55 @@
+传统web.xml配置:servlet/filter/listener/DispatcherServlet
+一、九大内置对象
+内置对象名	    类型
+request	        HttpServletRequest
+response	    HttpServletResponse
+config	        ServletConfig
+application	    ServletContext
+session	        HttpSession
+exception	    Throwable
+page	        Object(this)
+out	            JspWriter
+pageContext	    PageContext(可以获取其他八个内置对象)
+二、jsp四大域对象
+ServletContext     context域   只能在同一个web应用中使用 (全局的)
+HttpServletRequet  request域   只能在同一个请求中使用 (转发)
+HttpSession        session域   只能在同一个会话(session对象)中使用 (私有的)   --前三种在学习Servlet时就能接触到
+PageContext        page域      只能在当前jsp页面使用 (当前页面)               --jsp学习的
+三、servlet三大域对象
+request（HttpServletRequest）
+session（HttpSession）：
+application（ServletContext）
+三大Web组件（Servlet、Filter、Listener）
+
+
+1、web容器在启动的时候，会扫描每个jar包下的META-INF/services/javax.servlet.ServletContainerInitializer
+2、加载这个文件指定的类SpringServletContainerInitializer
+3、spring的应用一启动会加载感兴趣的WebApplicationInitializer接口的下的所有组件；
+4、并且为WebApplicationInitializer组件创建对象（组件不是接口，不是抽象类）
+	1）、AbstractContextLoaderInitializer：创建根容器；createRootApplicationContext()；
+	2）、AbstractDispatcherServletInitializer：
+			创建一个web的ioc容器；createServletApplicationContext();
+			创建了DispatcherServlet；createDispatcherServlet()；
+			将创建的DispatcherServlet添加到ServletContext中；
+				getServletMappings();
+	3）、AbstractAnnotationConfigDispatcherServletInitializer：注解方式配置的DispatcherServlet初始化器
+			创建根容器：createRootApplicationContext()
+					getRootConfigClasses();传入一个配置类
+			创建web的ioc容器： createServletApplicationContext();
+					获取配置类；getServletConfigClasses();
+
+总结：
+	以注解方式来启动SpringMVC；继承AbstractAnnotationConfigDispatcherServletInitializer；
+实现抽象方法指定DispatcherServlet的配置信息；
+
+===========================
+定制SpringMVC；
+1）、@EnableWebMvc:开启SpringMVC定制配置功能；
+	<mvc:annotation-driven/>；
+
+2）、配置组件（视图解析器、视图映射、静态资源映射、拦截器。。。）
+	extends WebMvcConfigurerAdapter
+
+
+
+
